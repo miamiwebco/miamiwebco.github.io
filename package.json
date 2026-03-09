@@ -1,0 +1,21 @@
+{
+  "name": "miami-leads",
+  "version": "1.0.0",
+  "description": "Miami local business lead generation tool",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "outreach": "node outreach.js",
+    "outreach:dry": "node outreach.js --dry-run",
+    "regen-emails": "node regenerate-emails.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.54.0",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^8.0.1"
+  }
+}
