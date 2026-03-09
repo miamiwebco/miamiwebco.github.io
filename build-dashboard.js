@@ -1,7 +1,7 @@
 /**
  * build-dashboard.js
  * Reads miami_leads.csv and writes dashboard.html with leads embedded as JSON.
- * Run this any time the CSV changes.
+ * Run this any time the CSV changes: node build-dashboard.js
  */
 const fs = require('fs');
 
@@ -49,11 +49,14 @@ const leads = rows.map(r => ({
   coldEmail:    r[col('Cold Email')]     || '',
   contactEmail: r[col('Contact Email')] || '',
   callScript:   r[col('Call Script')]   || '',
+  // "none" = searched but not found; treat as blank for display/filtering
+  instagram:    (r[col('Instagram')] || '').replace(/^none$/i, ''),
+  tiktok:       (r[col('TikTok')]    || '').replace(/^none$/i, ''),
 }));
 
 const LEADS_JSON = JSON.stringify(leads);
 
-// ── HTML ─────────────────────────────────────────────────────────────────────
+// ── HTML template ─────────────────────────────────────────────────────────────
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,12 +95,8 @@ header {
   height: var(--hdr-h);
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 16px;
-  flex-shrink: 0;
-  z-index: 30;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px; flex-shrink: 0; z-index: 30;
 }
 header h1 { font-size: 16px; font-weight: 600; white-space: nowrap; }
 header h1 span { color: var(--accent); }
@@ -132,20 +131,36 @@ header h1 span { color: var(--accent); }
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
   padding: 0 20px; gap: 6px; flex-shrink: 0;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.filter-label { color: var(--muted); font-size: 12px; margin-right: 4px; }
+.filter-bar::-webkit-scrollbar { display: none; }
+
+.filter-label { color: var(--muted); font-size: 12px; margin-right: 2px; white-space: nowrap; flex-shrink: 0; }
+.filter-sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; flex-shrink: 0; }
+
 .filter-btn {
   border: 1px solid var(--border); background: transparent;
   color: var(--muted); font-size: 12px; font-weight: 500;
-  padding: 4px 12px; border-radius: 20px; cursor: pointer;
-  transition: all .15s; white-space: nowrap;
+  padding: 4px 11px; border-radius: 20px; cursor: pointer;
+  transition: all .15s; white-space: nowrap; flex-shrink: 0;
 }
 .filter-btn:hover { border-color: var(--accent); color: var(--text); }
 .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+/* Weakness filter active states */
+.wf-btn.active.wf-website { background: #2d1b69; border-color: #7c3aed; color: #a78bfa; }
+.wf-btn.active.wf-rating  { background: #3d2000; border-color: #b45309; color: #fbbf24; }
+.wf-btn.active.wf-reviews { background: #0c2340; border-color: #1d4ed8; color: #60a5fa; }
+
+/* Contact method filter active states */
+.cf-btn.active.cf-email     { background: #0d2040; border-color: #1e3a5f; color: #58a6ff; }
+.cf-btn.active.cf-instagram { background: #2d0d20; border-color: #9d174d; color: #f472b6; }
+.cf-btn.active.cf-tiktok    { background: #0d2828; border-color: #0f766e; color: #2dd4bf; }
+
 /* Layout */
 .main { flex: 1; display: flex; overflow: hidden; }
-
 .table-wrap { flex: 1; overflow-y: auto; transition: margin-right .25s ease; }
 .table-wrap.panel-open { margin-right: var(--panel-w); }
 
@@ -210,8 +225,7 @@ td { padding: 11px 14px; vertical-align: middle; }
 
 .panel-hdr {
   padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
 }
 .panel-close {
   float: right; background: none; border: none;
@@ -253,9 +267,16 @@ td { padding: 11px 14px; vertical-align: middle; }
 .email-chip {
   display: inline-flex; align-items: center; gap: 6px;
   background: #0d2040; border: 1px solid #1e3a5f;
-  border-radius: 6px; padding: 4px 10px;
-  font-size: 13px; color: #58a6ff;
+  border-radius: 6px; padding: 4px 10px; font-size: 13px; color: #58a6ff;
 }
+.social-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 6px; padding: 3px 10px;
+  font-size: 12px; font-weight: 500; text-decoration: none; transition: opacity .15s;
+}
+.social-link:hover { opacity: 0.8; text-decoration: none !important; }
+.ig-link { background: #2d0d20; border: 1px solid #9d174d; color: #f472b6; }
+.tt-link { background: #0d2828; border: 1px solid #0f766e; color: #2dd4bf; }
 
 .script-block { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .script-top {
@@ -301,13 +322,23 @@ td { padding: 11px 14px; vertical-align: middle; }
 </header>
 
 <div class="filter-bar">
-  <span class="filter-label">Filter:</span>
+  <span class="filter-label">Status:</span>
   <button class="filter-btn active" data-f="all">All</button>
   <button class="filter-btn" data-f="not-contacted">Not Contacted</button>
   <button class="filter-btn" data-f="contacted">Contacted</button>
   <button class="filter-btn" data-f="interested">Interested</button>
   <button class="filter-btn" data-f="closed">Closed</button>
   <button class="filter-btn" data-f="not-interested">Not Interested</button>
+  <div class="filter-sep"></div>
+  <span class="filter-label">Issues:</span>
+  <button class="filter-btn wf-btn wf-website" data-w="website">No Website</button>
+  <button class="filter-btn wf-btn wf-rating"  data-w="rating">Low Rating</button>
+  <button class="filter-btn wf-btn wf-reviews" data-w="reviews">Few Reviews</button>
+  <div class="filter-sep"></div>
+  <span class="filter-label">Contact:</span>
+  <button class="filter-btn cf-btn cf-email"     data-c="email">Email</button>
+  <button class="filter-btn cf-btn cf-instagram" data-c="instagram">Instagram</button>
+  <button class="filter-btn cf-btn cf-tiktok"    data-c="tiktok">TikTok</button>
 </div>
 
 <div class="main">
@@ -399,6 +430,7 @@ const STATUS_CLS = {
 const LS_KEY = 'miami_leads_v1';
 let statuses = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
 let filter = 'all', query = '', selIdx = null;
+let weakFilters = new Set(), contactFilters = new Set();
 
 const $ = id => document.getElementById(id);
 function getS(i) { return statuses[i] || 'not-contacted'; }
@@ -442,19 +474,38 @@ function renderTable() {
 
   LEADS.forEach((lead, i) => {
     const s = getS(i);
-    const show = (filter === 'all' || s === filter) &&
-      (!query || [lead.name,lead.address,lead.phone,lead.weaknesses,lead.contactEmail]
+
+    // Weakness filter (AND — must match all active)
+    const w = (lead.weaknesses || '').toLowerCase();
+    const weakMatch = weakFilters.size === 0 || (
+      (!weakFilters.has('website') || w.includes('no website')) &&
+      (!weakFilters.has('rating')  || w.includes('rating'))    &&
+      (!weakFilters.has('reviews') || w.includes('reviews'))
+    );
+
+    // Contact method filter (AND — must have all selected contact types)
+    const hasEmail = !!(lead.contactEmail && lead.contactEmail !== 'not found');
+    const hasIG    = !!lead.instagram;
+    const hasTT    = !!lead.tiktok;
+    const contactMatch = contactFilters.size === 0 || (
+      (!contactFilters.has('email')     || hasEmail) &&
+      (!contactFilters.has('instagram') || hasIG)    &&
+      (!contactFilters.has('tiktok')    || hasTT)
+    );
+
+    const show = (filter === 'all' || s === filter) && weakMatch && contactMatch &&
+      (!query || [lead.name, lead.address, lead.phone, lead.weaknesses,
+                  lead.contactEmail, lead.instagram, lead.tiktok]
         .some(f => f.toLowerCase().includes(query)));
 
     const tr = document.createElement('tr');
-    if (!show)    tr.classList.add('hidden');
+    if (!show)      tr.classList.add('hidden');
     if (i===selIdx) tr.classList.add('selected');
     tr.dataset.i = i;
     if (show) vis++;
 
-    const r = parseFloat(lead.rating)||0;
+    const r    = parseFloat(lead.rating)||0;
     const addr = lead.address.replace(/, USA$/, '').replace(/, FL \\d{5}/, '');
-    const hasEmail = lead.contactEmail && lead.contactEmail !== 'not found';
 
     tr.innerHTML =
       '<td class="td-name"><div class="cell-clamp" title="' + esc(lead.name) + '">' + esc(lead.name) + '</div></td>' +
@@ -489,6 +540,13 @@ function updateStats() {
     '<span class="stat-chip"><b style="color:#3fb950">' + c['closed'] + '</b> Closed</span>';
 }
 
+// SVG icons for panel meta
+var PIN_SVG  = '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+var TEL_SVG  = '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+var MAIL_SVG = '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>';
+var IG_SVG   = '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>';
+var TT_SVG   = '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+
 function openPanel(i) {
   selIdx = i;
   const l = LEADS[i], s = getS(i);
@@ -503,20 +561,24 @@ function openPanel(i) {
   pss.innerHTML = statusOptions(s); pss.value = s; applyStatus(pss, s);
 
   const addr = l.address.replace(/, USA$/, '');
-  let meta =
-    '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-    '<span class="meta-val">' + esc(addr) + '</span>';
+  let meta = PIN_SVG + '<span class="meta-val">' + esc(addr) + '</span>';
 
   if (l.phone) meta +=
-    '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' +
-    '<span class="meta-val meta-hi"><a href="tel:' + esc(l.phone) + '">' + esc(l.phone) + '</a></span>';
+    TEL_SVG + '<span class="meta-val meta-hi"><a href="tel:' + esc(l.phone) + '">' + esc(l.phone) + '</a></span>';
 
+  // Email row
   const hasEmail = l.contactEmail && l.contactEmail !== 'not found';
-  meta +=
-    '<svg class="meta-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>' +
-    '<span class="meta-val">' + (hasEmail
-      ? '<span class="email-chip">&#9993; <a href="mailto:' + esc(l.contactEmail) + '">' + esc(l.contactEmail) + '</a></span>'
-      : '<span style="font-style:italic">No email found</span>') + '</span>';
+  meta += MAIL_SVG + '<span class="meta-val">' + (hasEmail
+    ? '<span class="email-chip">&#9993; <a href="mailto:' + esc(l.contactEmail) + '">' + esc(l.contactEmail) + '</a></span>'
+    : '<span style="font-style:italic">No email found</span>') + '</span>';
+
+  // Instagram row
+  if (l.instagram) meta +=
+    IG_SVG + '<span class="meta-val"><a class="social-link ig-link" href="https://instagram.com/' + esc(l.instagram) + '" target="_blank" rel="noopener">@' + esc(l.instagram) + '</a></span>';
+
+  // TikTok row
+  if (l.tiktok) meta +=
+    TT_SVG + '<span class="meta-val"><a class="social-link tt-link" href="https://tiktok.com/@' + esc(l.tiktok) + '" target="_blank" rel="noopener">@' + esc(l.tiktok) + '</a></span>';
 
   $('p-meta').innerHTML = meta;
   $('p-weak').innerHTML = weakBadges(l.weaknesses);
@@ -597,11 +659,34 @@ $('panel-status-sel').addEventListener('change', e => {
   if (filter !== 'all') renderTable();
 });
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
+// Status filter (single-select)
+document.querySelectorAll('.filter-btn:not(.wf-btn):not(.cf-btn)').forEach(btn => {
   btn.addEventListener('click', () => {
     filter = btn.dataset.f;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn:not(.wf-btn):not(.cf-btn)').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    if (selIdx !== null) closePanel();
+    renderTable();
+  });
+});
+
+// Weakness filter (multi-select toggle)
+document.querySelectorAll('.wf-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const w = btn.dataset.w;
+    if (weakFilters.has(w)) { weakFilters.delete(w); btn.classList.remove('active'); }
+    else                    { weakFilters.add(w);    btn.classList.add('active');    }
+    if (selIdx !== null) closePanel();
+    renderTable();
+  });
+});
+
+// Contact method filter (multi-select toggle)
+document.querySelectorAll('.cf-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const c = btn.dataset.c;
+    if (contactFilters.has(c)) { contactFilters.delete(c); btn.classList.remove('active'); }
+    else                       { contactFilters.add(c);    btn.classList.add('active');    }
     if (selIdx !== null) closePanel();
     renderTable();
   });
