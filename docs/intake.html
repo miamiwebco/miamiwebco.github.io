@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Your Website — Miami Web Co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #080b12;
+      --surface:  #0f1420;
+      --card:     #141927;
+      --border:   rgba(255,255,255,.07);
+      --accent:   #00d4ff;
+      --accent2:  #7b5ea7;
+      --gold:     #f0c040;
+      --text:     #e8ecf4;
+      --muted:    #6b7894;
+      --danger:   #ff4757;
+      --radius:   14px;
+      --radius-sm:8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .site-header {
+      background: linear-gradient(135deg, #080b12 0%, #0d1528 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(0,212,255,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 1.5rem;
+    }
+    .logo-mark .dot {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .logo-mark span {
+      font-family: 'Syne', sans-serif;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .site-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .75rem;
+    }
+    .site-header p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── SECTION BLOCKS ─────────────────────────────────────── */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 1.75rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .section-title .num {
+      width: 26px; height: 26px;
+      background: rgba(0,212,255,.12);
+      border: 1px solid rgba(0,212,255,.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── FORM FIELDS ─────────────────────────────────────────── */
+    .field { margin-bottom: 1.25rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .45rem;
+    }
+    label .req { color: var(--accent); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      padding: .75rem 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,212,255,.1);
+    }
+    textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 520px) { .row-2 { grid-template-columns: 1fr; } }
+
+    /* ── PACKAGE CARDS ──────────────────────────────────────── */
+    .package-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 520px) { .package-grid { grid-template-columns: 1fr; } }
+
+    .package-card {
+      position: relative;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .15s;
+      background: var(--card);
+      user-select: none;
+    }
+    .package-card:hover { border-color: rgba(0,212,255,.4); transform: translateY(-2px); }
+    .package-card input[type="radio"] { display: none; }
+    .package-card.selected {
+      border-color: var(--accent);
+      background: rgba(0,212,255,.06);
+      box-shadow: 0 0 0 1px var(--accent) inset;
+    }
+    .package-card.selected-gold {
+      border-color: var(--gold);
+      background: rgba(240,192,64,.05);
+      box-shadow: 0 0 0 1px var(--gold) inset;
+    }
+    .pkg-badge {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 20px;
+      margin-bottom: .85rem;
+    }
+    .pkg-badge.basic { background: rgba(0,212,255,.12); color: var(--accent); }
+    .pkg-badge.full  { background: rgba(240,192,64,.15); color: var(--gold); }
+    .pkg-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+    .pkg-price.basic { color: var(--accent); }
+    .pkg-price.full  { color: var(--gold); }
+    .pkg-name {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 1rem;
+    }
+    .pkg-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .pkg-features li {
+      font-size: .85rem;
+      color: #a0aabe;
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      line-height: 1.4;
+    }
+    .pkg-features li::before {
+      content: '✓';
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+    .package-card.selected .pkg-features li::before { color: var(--accent); }
+    .package-card.selected-gold .pkg-features li::before { color: var(--gold); }
+    .pkg-features li.extra { color: var(--gold); }
+    .pkg-features li.extra::before { color: var(--gold); }
+
+    .check-mark {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      transition: all .2s;
+    }
+    .package-card.selected .check-mark {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+    .package-card.selected-gold .check-mark {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+    }
+
+    /* ── CHECKBOXES ─────────────────────────────────────────── */
+    .check-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .check-pill {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .55rem 1rem;
+      cursor: pointer;
+      font-size: .9rem;
+      transition: border-color .2s, background .2s;
+      user-select: none;
+    }
+    .check-pill input { display: none; }
+    .check-pill .box {
+      width: 16px; height: 16px;
+      border: 2px solid var(--muted);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .check-pill:has(input:checked) {
+      border-color: var(--accent);
+      background: rgba(0,212,255,.07);
+    }
+    .check-pill:has(input:checked) .box {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    /* ── COLOR SCHEME ───────────────────────────────────────── */
+    .scheme-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+    }
+    @media (max-width: 480px) { .scheme-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .scheme-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem .75rem;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .2s, transform .15s;
+      user-select: none;
+    }
+    .scheme-card input { display: none; }
+    .scheme-card .swatch {
+      width: 100%; height: 40px;
+      border-radius: 6px;
+      margin-bottom: .6rem;
+    }
+    .scheme-card span {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .scheme-card:has(input:checked) { border-color: var(--accent); transform: scale(1.04); }
+    .scheme-card:has(input:checked) span { color: var(--accent); }
+
+    /* ── FILE UPLOAD ─────────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.75rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(0,212,255,.04);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .upload-zone p { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+    .upload-zone strong { color: var(--accent); }
+    .file-list { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .file-tag {
+      background: rgba(0,212,255,.1);
+      border: 1px solid rgba(0,212,255,.2);
+      border-radius: 20px;
+      padding: .2rem .65rem;
+      font-size: .78rem;
+      color: var(--accent);
+    }
+
+    /* ── HOURS TABLE ─────────────────────────────────────────── */
+    .hours-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .hours-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr auto;
+      gap: .6rem;
+      align-items: center;
+    }
+    @media (max-width: 480px) {
+      .hours-row { grid-template-columns: 80px 1fr 1fr auto; gap: .4rem; }
+    }
+    .hours-row .day-label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .hours-row input[type="time"] {
+      padding: .55rem .75rem;
+      font-size: .88rem;
+    }
+    .closed-toggle {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .78rem;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .closed-toggle input { display: none; }
+    .toggle-pill {
+      width: 34px; height: 18px;
+      background: var(--border);
+      border-radius: 9px;
+      position: relative;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    .toggle-pill::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 3px;
+      width: 12px; height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform .2s;
+    }
+    .closed-toggle:has(input:checked) .toggle-pill { background: var(--danger); }
+    .closed-toggle:has(input:checked) .toggle-pill::after { transform: translateX(16px); }
+
+    /* ── SUBMIT ──────────────────────────────────────────────── */
+    .submit-wrap { margin-top: 2rem; text-align: center; }
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      background: linear-gradient(135deg, var(--accent), #0099bb);
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      border: none;
+      border-radius: 10px;
+      padding: 1rem 2.5rem;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, opacity .2s;
+      box-shadow: 0 4px 20px rgba(0,212,255,.3);
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,.4); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .submit-note {
+      margin-top: .85rem;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    /* ── SUCCESS SCREEN ─────────────────────────────────────── */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .success-icon {
+      width: 80px; height: 80px;
+      background: rgba(0,212,255,.1);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1.5rem;
+      animation: pop .4s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes pop {
+      from { transform: scale(.5); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+    #success-screen h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: .75rem;
+      line-height: 1.2;
+    }
+    #success-screen p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    #success-screen .biz-name {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── MISC ────────────────────────────────────────────────── */
+    .hint { font-size: .78rem; color: var(--muted); margin-top: .35rem; }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.25rem 0;
+    }
+    select option { background: #1a2035; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-mark">
+    <div class="dot"></div>
+    <span>Miami Web Co.</span>
+  </div>
+  <h1>Let's Build Your Website</h1>
+  <p>Fill out the form below and we'll have your site live within 48 hours.</p>
+</header>
+
+<div class="container">
+
+  <form id="intake-form" novalidate>
+
+    <!-- 1. Business Info -->
+    <div class="section">
+      <div class="section-title"><div class="num">1</div> Business Information</div>
+
+      <div class="field">
+        <label>Business Name <span class="req">*</span></label>
+        <input type="text" name="business_name" placeholder="e.g. Guembo's and Grill" required />
+      </div>
+
+      <div class="field">
+        <label>Street Address <span class="req">*</span></label>
+        <input type="text" name="address" placeholder="e.g. 1234 NW 17th Ave, Miami, FL 33125" required />
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" name="phone" placeholder="(305) 000-0000" required />
+        </div>
+        <div class="field">
+          <label>Cuisine Type <span class="req">*</span></label>
+          <select name="cuisine_type" required>
+            <option value="" disabled selected>Select one…</option>
+            <option>American</option>
+            <option>Caribbean</option>
+            <option>Cuban</option>
+            <option>Colombian</option>
+            <option>Dominican</option>
+            <option>Haitian</option>
+            <option>Italian</option>
+            <option>Japanese / Sushi</option>
+            <option>Mexican</option>
+            <option>Peruvian</option>
+            <option>Pizza</option>
+            <option>Seafood</option>
+            <option>Steakhouse / Grill</option>
+            <option>Venezuelan</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Service Types</label>
+        <div class="check-group">
+          <label class="check-pill">
+            <input type="checkbox" name="service" value="Dine-In" />
+            <div class="box">✓</div> Dine-In
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="service" value="Takeout" />
+            <div class="box">✓</div> Takeout
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="service" value="Delivery" />
+            <div class="box">✓</div> Delivery
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="service" value="Catering" />
+            <div class="box">✓</div> Catering
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Owner / Contact -->
+    <div class="section">
+      <div class="section-title"><div class="num">2</div> Owner / Contact</div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Owner Name <span class="req">*</span></label>
+          <input type="text" name="owner_name" placeholder="Full name" required />
+        </div>
+        <div class="field">
+          <label>Best Contact Email <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="you@example.com" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Package -->
+    <div class="section">
+      <div class="section-title"><div class="num">3</div> Choose Your Package</div>
+
+      <div class="package-grid">
+
+        <label class="package-card" id="card-basic">
+          <input type="radio" name="package" value="Basic $300" required />
+          <div class="check-mark">✓</div>
+          <div class="pkg-badge basic">Basic</div>
+          <div class="pkg-price basic">$300</div>
+          <div class="pkg-name">One-Time / No Monthly Fees</div>
+          <ul class="pkg-features">
+            <li>One-page website</li>
+            <li>Business name, address &amp; phone</li>
+            <li>Hours of operation</li>
+            <li>Mobile-friendly design</li>
+            <li>Live within 48 hours</li>
+          </ul>
+        </label>
+
+        <label class="package-card" id="card-full">
+          <input type="radio" name="package" value="Full $500" required />
+          <div class="check-mark">✓</div>
+          <div class="pkg-badge full">Full</div>
+          <div class="pkg-price full">$500</div>
+          <div class="pkg-name">Everything in Basic, Plus:</div>
+          <ul class="pkg-features">
+            <li class="extra">Full menu display</li>
+            <li class="extra">Click-to-call button</li>
+            <li class="extra">Google Maps embed</li>
+            <li class="extra">Google Reviews link</li>
+            <li class="extra">Social media links</li>
+            <li class="extra">Photo gallery</li>
+            <li class="extra">FAQ section</li>
+            <li class="extra">Contact form</li>
+            <li class="extra">SEO — show up on Google</li>
+          </ul>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- 4. Deposit -->
+    <div class="section">
+      <div class="section-title"><div class="num">4</div> Deposit Info</div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Venmo or Zelle Handle <span class="req">*</span></label>
+          <input type="text" name="payment_handle" placeholder="@yourhandle or phone number" required />
+        </div>
+        <div class="field">
+          <label>Payment Method</label>
+          <select name="payment_method">
+            <option value="" disabled selected>Select…</option>
+            <option>Venmo</option>
+            <option>Zelle</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint">We'll send a $150 deposit request before starting. Remaining balance due on delivery.</p>
+    </div>
+
+    <!-- 5. Hours -->
+    <div class="section">
+      <div class="section-title"><div class="num">5</div> Hours of Operation</div>
+
+      <div class="hours-grid">
+        <div class="hours-row">
+          <span class="day-label">Monday</span>
+          <input type="time" name="mon_open" value="11:00" />
+          <input type="time" name="mon_close" value="22:00" />
+          <label class="closed-toggle"><input type="checkbox" name="mon_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Tuesday</span>
+          <input type="time" name="tue_open" value="11:00" />
+          <input type="time" name="tue_close" value="22:00" />
+          <label class="closed-toggle"><input type="checkbox" name="tue_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Wednesday</span>
+          <input type="time" name="wed_open" value="11:00" />
+          <input type="time" name="wed_close" value="22:00" />
+          <label class="closed-toggle"><input type="checkbox" name="wed_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Thursday</span>
+          <input type="time" name="thu_open" value="11:00" />
+          <input type="time" name="thu_close" value="22:00" />
+          <label class="closed-toggle"><input type="checkbox" name="thu_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Friday</span>
+          <input type="time" name="fri_open" value="11:00" />
+          <input type="time" name="fri_close" value="23:00" />
+          <label class="closed-toggle"><input type="checkbox" name="fri_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Saturday</span>
+          <input type="time" name="sat_open" value="11:00" />
+          <input type="time" name="sat_close" value="23:00" />
+          <label class="closed-toggle"><input type="checkbox" name="sat_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+        <div class="hours-row">
+          <span class="day-label">Sunday</span>
+          <input type="time" name="sun_open" value="12:00" />
+          <input type="time" name="sun_close" value="21:00" />
+          <label class="closed-toggle"><input type="checkbox" name="sun_closed" /><div class="toggle-pill"></div>Closed</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Menu -->
+    <div class="section">
+      <div class="section-title"><div class="num">6</div> Menu Items</div>
+      <div class="field">
+        <label>Paste your menu below</label>
+        <textarea name="menu_items" rows="8" placeholder="List your dishes, prices, and any descriptions you'd like. The more detail, the better your website will look.&#10;&#10;Example:&#10;Churrasco — $22 | Grilled skirt steak, chimichurri, rice &amp; beans&#10;Empanadas (3) — $9 | Beef or chicken, served with aji sauce"></textarea>
+      </div>
+    </div>
+
+    <!-- 7. Media -->
+    <div class="section">
+      <div class="section-title"><div class="num">7</div> Logo &amp; Photos</div>
+
+      <div class="field">
+        <label>Logo File</label>
+        <div class="upload-zone" id="logo-zone">
+          <input type="file" name="logo" accept="image/*" id="logo-input" />
+          <div class="upload-icon">🖼️</div>
+          <p><strong>Click to upload</strong> or drag &amp; drop<br />PNG, JPG, SVG — your logo</p>
+          <div class="file-list" id="logo-list"></div>
+        </div>
+        <p class="hint">No logo? No problem — we'll design a simple text logo for you.</p>
+      </div>
+
+      <div class="field">
+        <label>Food &amp; Restaurant Photos</label>
+        <div class="upload-zone" id="photos-zone">
+          <input type="file" name="photos" accept="image/*" multiple id="photos-input" />
+          <div class="upload-icon">📸</div>
+          <p><strong>Click to upload</strong> or drag &amp; drop<br />Select multiple photos at once</p>
+          <div class="file-list" id="photos-list"></div>
+        </div>
+        <p class="hint">Phone photos are fine. More photos = better gallery.</p>
+      </div>
+    </div>
+
+    <!-- 8. Social & Online -->
+    <div class="section">
+      <div class="section-title"><div class="num">8</div> Social Media &amp; Online Presence</div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Instagram Handle</label>
+          <input type="text" name="instagram" placeholder="@yourrestaurant" />
+        </div>
+        <div class="field">
+          <label>TikTok Handle</label>
+          <input type="text" name="tiktok" placeholder="@yourrestaurant" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Facebook Page URL</label>
+          <input type="url" name="facebook" placeholder="facebook.com/yourpage" />
+        </div>
+        <div class="field">
+          <label>Google Maps / Yelp Link</label>
+          <input type="url" name="google_maps" placeholder="Paste your Google Maps link" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Design Preferences -->
+    <div class="section">
+      <div class="section-title"><div class="num">9</div> Design Preferences</div>
+
+      <div class="field">
+        <label>Preferred Color Scheme</label>
+        <div class="scheme-grid">
+          <label class="scheme-card">
+            <input type="radio" name="color_scheme" value="Dark" />
+            <div class="swatch" style="background: linear-gradient(135deg,#111 0%,#222 100%);"></div>
+            <span>Dark</span>
+          </label>
+          <label class="scheme-card">
+            <input type="radio" name="color_scheme" value="Light" />
+            <div class="swatch" style="background: linear-gradient(135deg,#f5f5f0 0%,#e8e4db 100%);"></div>
+            <span>Light</span>
+          </label>
+          <label class="scheme-card">
+            <input type="radio" name="color_scheme" value="Colorful" />
+            <div class="swatch" style="background: linear-gradient(135deg,#ff6b35 0%,#f7c948 50%,#2ec4b6 100%);"></div>
+            <span>Colorful</span>
+          </label>
+          <label class="scheme-card">
+            <input type="radio" name="color_scheme" value="Minimal" />
+            <div class="swatch" style="background: linear-gradient(135deg,#fff 0%,#f0f0f0 50%,#ddd 100%); border: 1px solid #ddd;"></div>
+            <span>Minimal</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:1.25rem;">
+        <label>Reference Website (a site you like the look of)</label>
+        <input type="url" name="reference_site" placeholder="https://example.com" />
+        <p class="hint">Optional — paste any website URL you'd like us to draw inspiration from.</p>
+      </div>
+    </div>
+
+    <!-- 10. Special Notes -->
+    <div class="section">
+      <div class="section-title"><div class="num">10</div> Special Notes</div>
+      <div class="field">
+        <label>Anything else we should know?</label>
+        <textarea name="special_notes" rows="5" placeholder="Specials, promotions, unique story, anything specific you want on the site, or anything at all..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span>Submit My Order</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <p class="submit-note">We'll reach out within a few hours to confirm everything.</p>
+    </div>
+
+  </form>
+
+  <!-- Success Screen -->
+  <div id="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>You're all set, <span class="biz-name" id="success-biz-name"></span>!</h2>
+    <p>We'll have your site ready within 48 hours — expect a call from us to confirm details.</p>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  // ── Package card selection
+  document.querySelectorAll('.package-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.package-card').forEach(c => {
+        c.classList.remove('selected', 'selected-gold');
+      });
+      const isBasic = card.id === 'card-basic';
+      card.classList.add(isBasic ? 'selected' : 'selected-gold');
+    });
+  });
+
+  // ── File upload display
+  function setupUpload(inputId, listId) {
+    const input = document.getElementById(inputId);
+    const list  = document.getElementById(listId);
+    input.addEventListener('change', () => {
+      list.innerHTML = '';
+      Array.from(input.files).forEach(f => {
+        const tag = document.createElement('div');
+        tag.className = 'file-tag';
+        tag.textContent = f.name;
+        list.appendChild(tag);
+      });
+    });
+  }
+  setupUpload('logo-input',   'logo-list');
+  setupUpload('photos-input', 'photos-list');
+
+  // ── Drag-over highlight
+  document.querySelectorAll('.upload-zone').forEach(zone => {
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', ()  => zone.classList.remove('dragover'));
+    zone.addEventListener('drop',      e => { e.preventDefault(); zone.classList.remove('dragover'); });
+  });
+
+  // ── Closed toggle disables time inputs
+  document.querySelectorAll('.closed-toggle input[type="checkbox"]').forEach(chk => {
+    chk.addEventListener('change', () => {
+      const row = chk.closest('.hours-row');
+      row.querySelectorAll('input[type="time"]').forEach(t => {
+        t.disabled = chk.checked;
+        t.style.opacity = chk.checked ? '.35' : '1';
+      });
+    });
+  });
+
+  // ── Form submit
+  document.getElementById('intake-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const pkg = document.querySelector('input[name="package"]:checked');
+    if (!pkg) {
+      alert('Please select a package (Basic or Full).');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Sending…';
+
+    // Collect form data (for future Formspree/email integration)
+    const data = new FormData(this);
+    const bizName = data.get('business_name') || 'your restaurant';
+
+    // Simulate a brief send delay then show success
+    setTimeout(() => {
+      document.getElementById('intake-form').style.display = 'none';
+      const screen = document.getElementById('success-screen');
+      document.getElementById('success-biz-name').textContent = bizName;
+      screen.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 800);
+  });
+</script>
+
+</body>
+</html>
