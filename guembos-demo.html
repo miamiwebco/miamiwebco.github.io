@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guembo's and Grill | Allapattah, Miami</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ember:   #e8572a;
+      --gold:    #c9923a;
+      --charcoal:#1c1410;
+      --dark:    #0f0b08;
+      --cream:   #f7f1e8;
+      --muted:   #7a6a5a;
+      --border:  rgba(201,146,58,.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--charcoal);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── MOBILE STICKY CALL BUTTON ─────────────────────────────── */
+    .mobile-call-bar {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+      background: #1a7a34;
+      padding: 0;
+    }
+    .mobile-call-bar a {
+      display: flex; align-items: center; justify-content: center;
+      gap: .65rem;
+      color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 1rem;
+      letter-spacing: .04em;
+      padding: 1rem;
+      width: 100%;
+    }
+    .mobile-call-bar .call-icon {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5%;
+      background: rgba(15,11,8,.0);
+      transition: background .35s, box-shadow .35s, padding .35s;
+    }
+    nav.scrolled {
+      background: rgba(15,11,8,.97);
+      box-shadow: 0 2px 24px rgba(0,0,0,.6);
+      padding: .8rem 5%;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: .03em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a {
+      color: rgba(247,241,232,.82);
+      text-decoration: none;
+      font-size: .875rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--ember) !important;
+      color: #fff !important;
+      padding: .5rem 1.2rem;
+      border-radius: 4px;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: #c9411a !important; }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); border-radius: 2px; transition: .3s; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(15,11,8,.98);
+      flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--cream); text-decoration: none;
+      font-size: 1.6rem; font-family: 'Playfair Display', serif;
+      transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close { position: absolute; top: 1.4rem; right: 5%; font-size: 2rem; cursor: pointer; color: var(--cream); background: none; border: none; }
+
+    /* ── HERO ────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 5% 6rem;
+      position: relative;
+      overflow: hidden;
+      background-color: #0f0b08;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.04);
+      animation: heroZoom 18s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom { to { transform: scale(1.0); } }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(15,11,8,.82) 0%,
+        rgba(30,10,5,.68) 50%,
+        rgba(15,11,8,.88) 100%
+      );
+    }
+    /* bottom fade */
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0; height: 140px;
+      background: linear-gradient(to top, var(--charcoal), transparent);
+      pointer-events: none; z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(201,146,58,.4);
+      color: var(--gold);
+      font-size: .7rem; font-weight: 600; letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .45rem 1.1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      background: rgba(201,146,58,.1);
+      backdrop-filter: blur(4px);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 9vw, 7rem);
+      line-height: 1.03;
+      letter-spacing: -.01em;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 24px rgba(0,0,0,.5);
+    }
+    .hero-title span { color: var(--ember); }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(247,241,232,.72);
+      font-weight: 300;
+      max-width: 460px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: var(--ember);
+      color: #fff; text-decoration: none;
+      padding: .9rem 2.1rem;
+      border-radius: 5px;
+      font-weight: 600; font-size: .9rem;
+      letter-spacing: .04em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 18px rgba(232,87,42,.35);
+    }
+    .btn-primary:hover { background: #c9411a; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(232,87,42,.45); }
+    .btn-outline {
+      border: 1px solid rgba(247,241,232,.35);
+      color: var(--cream); text-decoration: none;
+      padding: .9rem 2.1rem;
+      border-radius: 5px;
+      font-weight: 500; font-size: .9rem;
+      backdrop-filter: blur(4px);
+      transition: border-color .2s, color .2s, transform .15s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute; bottom: 2.8rem; left: 50%; transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: .45rem;
+      color: rgba(247,241,232,.35); font-size: .65rem; letter-spacing: .14em; text-transform: uppercase;
+      animation: bounceScroll 2.5s ease-in-out infinite;
+    }
+    .hero-scroll::after {
+      content: '';
+      display: block; width: 1px; height: 38px;
+      background: linear-gradient(to bottom, rgba(201,146,58,.45), transparent);
+    }
+    @keyframes bounceScroll { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+    /* ── SECTION BASE ────────────────────────────────────────────── */
+    section { padding: 6rem 5%; }
+    .section-label {
+      font-size: .7rem; font-weight: 600; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--ember);
+      margin-bottom: .75rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-line {
+      width: 48px; height: 3px;
+      background: linear-gradient(to right, var(--ember), var(--gold));
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ── STATS STRIP ─────────────────────────────────────────────── */
+    #stats {
+      padding: 3rem 5%;
+      background: rgba(201,146,58,.06);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1rem; text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; color: var(--gold);
+    }
+    .stat-label { font-size: .78rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: .3rem; }
+
+    /* ── ABOUT ───────────────────────────────────────────────────── */
+    #about { background: var(--dark); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .about-img-wrap {
+      position: relative; border-radius: 10px; overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s ease;
+    }
+    .about-img-wrap:hover img { transform: scale(1.04); }
+    .about-accent {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(to right, var(--ember), var(--gold));
+    }
+    .about-text p {
+      color: rgba(247,241,232,.72);
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+      font-size: .975rem;
+    }
+    .about-signature {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.45rem;
+      color: var(--gold);
+      margin-top: 2rem;
+    }
+
+    /* ── MENU ────────────────────────────────────────────────────── */
+    #menu { background: var(--charcoal); }
+
+    /* featured photo strip */
+    .menu-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-bottom: 3rem;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .menu-photo {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .menu-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .5s ease;
+    }
+    .menu-photo:hover img { transform: scale(1.07); }
+    .menu-photo-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: .6rem .9rem;
+      background: linear-gradient(to top, rgba(15,11,8,.85), transparent);
+      font-size: .78rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(247,241,232,.9);
+    }
+
+    .menu-tabs {
+      display: flex; gap: .5rem; margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: rgba(247,241,232,.55);
+      padding: .6rem 1.4rem;
+      border-radius: 100px;
+      font-size: .85rem; font-weight: 500;
+      cursor: pointer; transition: .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--ember); border-color: var(--ember); color: #fff;
+    }
+
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .menu-item {
+      background: var(--dark);
+      padding: 1.5rem;
+      transition: background .2s;
+    }
+    .menu-item:hover { background: rgba(232,87,42,.06); }
+    .menu-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .45rem; }
+    .menu-item-name { font-weight: 600; font-size: .975rem; }
+    .menu-item-price { color: var(--gold); font-weight: 700; font-size: .95rem; white-space: nowrap; }
+    .menu-item-desc { color: var(--muted); font-size: .82rem; line-height: 1.6; }
+    .menu-item-tag {
+      display: inline-block; margin-top: .65rem;
+      background: rgba(232,87,42,.12); color: var(--ember);
+      font-size: .67rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: .22rem .65rem; border-radius: 3px;
+    }
+    .menu-item-tag.gold-tag {
+      background: rgba(201,146,58,.12); color: var(--gold);
+    }
+
+    /* ── REVIEWS BANNER ──────────────────────────────────────────── */
+    #reviews-cta {
+      padding: 4rem 5%;
+      background: linear-gradient(135deg, #1a1008 0%, #261508 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .reviews-inner { max-width: 640px; margin: 0 auto; }
+    .reviews-stars { font-size: 1.8rem; letter-spacing: .1em; margin-bottom: .9rem; }
+    .reviews-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      margin-bottom: .75rem;
+    }
+    .reviews-sub {
+      color: rgba(247,241,232,.6);
+      font-size: .95rem; line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .btn-review {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #fff;
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: 700; font-size: .9rem;
+      padding: .85rem 1.8rem;
+      border-radius: 6px;
+      transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 18px rgba(0,0,0,.3);
+    }
+    .btn-review:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+    .btn-review img { width: 20px; height: 20px; }
+    .google-g {
+      width: 22px; height: 22px; border-radius: 2px;
+      background: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1rem;
+      background: linear-gradient(135deg, #4285f4 0%, #34a853 33%, #fbbc05 66%, #ea4335 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── HOURS ───────────────────────────────────────────────────── */
+    #hours {
+      background: var(--dark);
+      text-align: center;
+    }
+    .hours-card {
+      max-width: 580px; margin: 2.5rem auto 0;
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+    }
+    .hours-row {
+      display: flex; justify-content: space-between;
+      padding: 1rem 1.75rem;
+      font-size: .9rem;
+    }
+    .hours-row:nth-child(even) { background: rgba(255,255,255,.02); }
+    .hours-day { color: rgba(247,241,232,.6); }
+    .hours-time { font-weight: 500; }
+    .hours-time.late { color: var(--ember); }
+
+    /* ── LOCATION ────────────────────────────────────────────────── */
+    #location { background: var(--charcoal); }
+    .location-grid {
+      display: grid; grid-template-columns: 1fr 1.5fr;
+      gap: 3rem; align-items: start;
+    }
+    .info-block { margin-bottom: 1.75rem; }
+    .info-label {
+      font-size: .7rem; font-weight: 600; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--ember);
+      margin-bottom: .4rem;
+    }
+    .info-value { color: rgba(247,241,232,.8); font-size: .95rem; line-height: 1.65; }
+    .info-value a { color: var(--gold); text-decoration: none; }
+    .info-value a:hover { text-decoration: underline; }
+    .map-wrap {
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+      height: 390px;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* ── CONTACT ─────────────────────────────────────────────────── */
+    #contact { background: var(--dark); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 4rem; align-items: start;
+    }
+    .contact-intro p {
+      color: rgba(247,241,232,.65);
+      line-height: 1.8; font-size: .95rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-method { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.1rem; }
+    .contact-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(232,87,42,.1); border: 1px solid rgba(232,87,42,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-method-text { font-size: .9rem; color: rgba(247,241,232,.75); }
+    .contact-method-text strong { display: block; font-weight: 600; color: var(--cream); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--cream);
+      padding: .78rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      transition: border-color .2s, background .2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--ember);
+      background: rgba(232,87,42,.05);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-group select option { background: #1c1410; }
+    .form-submit {
+      background: var(--ember); color: #fff;
+      border: none; padding: .95rem;
+      border-radius: 5px; font-size: .9rem;
+      font-weight: 700; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s, transform .15s;
+      letter-spacing: .04em;
+    }
+    .form-submit:hover { background: #c9411a; transform: translateY(-1px); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5%;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem; color: var(--gold);
+      margin-bottom: .5rem;
+    }
+    .footer-tagline { font-size: .78rem; color: var(--muted); letter-spacing: .1em; margin-bottom: 1.5rem; text-transform: uppercase; }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .footer-links a { color: rgba(247,241,232,.4); text-decoration: none; font-size: .82rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: .73rem; color: rgba(122,106,90,.5); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-grid,
+      .location-grid,
+      .contact-grid { grid-template-columns: 1fr; }
+      .about-img-wrap { aspect-ratio: 16/7; }
+      .map-wrap { height: 280px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-call-bar { display: block; }
+      body { padding-bottom: 62px; }
+      .menu-photos { grid-template-columns: repeat(3, 1fr); gap: .4rem; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 4rem 5%; }
+      .stats-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .menu-photos { grid-template-columns: 1fr; }
+      .menu-photo { aspect-ratio: 16/7; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE STICKY CALL BUTTON -->
+  <div class="mobile-call-bar">
+    <a href="tel:7865362929">
+      <div class="call-icon">📞</div>
+      Call Us Now &nbsp;·&nbsp; (786) 536-2929
+    </a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#">Guembo's &amp; Grill</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#hours">Hours</a></li>
+      <li><a href="#location">Location</a></li>
+      <li><a href="#contact" class="nav-cta">Reserve a Table</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="toggleMenu()">✕</button>
+    <a href="#about"    onclick="toggleMenu()">About</a>
+    <a href="#menu"     onclick="toggleMenu()">Menu</a>
+    <a href="#hours"    onclick="toggleMenu()">Hours</a>
+    <a href="#location" onclick="toggleMenu()">Location</a>
+    <a href="#contact"  onclick="toggleMenu()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Allapattah, Miami &nbsp;·&nbsp; Open Late</div>
+      <h1 class="hero-title">Guembo's<br /><span>&amp; Grill</span></h1>
+      <p class="hero-sub">Bold flavors, real fire, and recipes that have fed the neighborhood for years. Come hungry.</p>
+      <div class="hero-actions">
+        <a href="#menu"    class="btn-primary">View Our Menu</a>
+        <a href="#contact" class="btn-outline">Reserve a Table</a>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- STATS -->
+  <div id="stats">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-num">100+</div>
+        <div class="stat-label">Google Reviews</div>
+      </div>
+      <div>
+        <div class="stat-num">Open Late</div>
+        <div class="stat-label">Wed–Sun Until 4:30 AM</div>
+      </div>
+      <div>
+        <div class="stat-num">Allapattah</div>
+        <div class="stat-label">Heart of Miami</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
+            alt="Inside Guembo's and Grill restaurant"
+            loading="lazy"
+          />
+          <div class="about-accent"></div>
+        </div>
+        <div class="about-text">
+          <p class="section-label">Our Story</p>
+          <h2 class="section-title">Born in the Heart of Allapattah</h2>
+          <div class="section-line"></div>
+          <p>Guembo's and Grill started as what all great things start as: a passion for real food and a desire to feed the community right. Located on NW 22nd Ave, we've been a fixture in Allapattah — one of Miami's most authentic, hard-working neighborhoods.</p>
+          <p>Everything we make comes from recipes passed down and perfected over time. We believe good food should be bold, honest, and made with pride. No shortcuts. Just smoke, heat, and flavor that keeps people coming back.</p>
+          <p>Whether you're a longtime regular or pulling up for the first time, you'll feel it from the first bite. That's the Guembo's promise.</p>
+          <div class="about-signature">— The Guembo's Family</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="container">
+      <p class="section-label">What We're Serving</p>
+      <h2 class="section-title">Our Menu</h2>
+      <div class="section-line"></div>
+
+      <!-- Photo strip -->
+      <div class="menu-photos">
+        <div class="menu-photo">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="BBQ Ribs" loading="lazy" />
+          <div class="menu-photo-label">Slow-Smoked Ribs</div>
+        </div>
+        <div class="menu-photo">
+          <img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=600&q=80" alt="Grilled Chicken Wings" loading="lazy" />
+          <div class="menu-photo-label">Smoked Wings</div>
+        </div>
+        <div class="menu-photo">
+          <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=600&q=80" alt="Grilled Meats" loading="lazy" />
+          <div class="menu-photo-label">Off the Grill</div>
+        </div>
+      </div>
+
+      <div class="menu-tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'starters')">Starters</button>
+        <button class="tab-btn"        onclick="switchTab(this,'mains')">Mains</button>
+        <button class="tab-btn"        onclick="switchTab(this,'sides')">Sides</button>
+        <button class="tab-btn"        onclick="switchTab(this,'drinks')">Drinks</button>
+      </div>
+
+      <!-- Starters -->
+      <div class="menu-panel active" id="tab-starters">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Smoked Wings (6 pc)</span>
+              <span class="menu-item-price">$12</span>
+            </div>
+            <div class="menu-item-desc">Low-smoked then finished on the grill. Choice of house BBQ, honey garlic, lemon pepper, or dry rub. Celery and blue cheese on the side.</div>
+            <span class="menu-item-tag">🔥 Best Seller</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Collard Green Egg Rolls (4 pc)</span>
+              <span class="menu-item-price">$11</span>
+            </div>
+            <div class="menu-item-desc">Crispy fried rolls packed with slow-cooked collard greens and smoked turkey. Served with house pepper jelly dipping sauce.</div>
+            <span class="menu-item-tag">House Original</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Loaded Nachos</span>
+              <span class="menu-item-price">$14</span>
+            </div>
+            <div class="menu-item-desc">Tortilla chips piled with pulled smoked meat, cheddar-jack, jalapeños, pico de gallo, sour cream, and pickled red onion.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Smoked Sausage Bites</span>
+              <span class="menu-item-price">$10</span>
+            </div>
+            <div class="menu-item-desc">House-smoked Andouille sliced thick and griddled. Served with stone-ground mustard and bread &amp; butter pickles.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Grilled Corn Elotes</span>
+              <span class="menu-item-price">$8</span>
+            </div>
+            <div class="menu-item-desc">Miami-style fire-grilled corn rubbed with mayo, cotija, smoked paprika, and a hit of lime. Add hot sauce on request.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Soup of the Day</span>
+              <span class="menu-item-price">$9</span>
+            </div>
+            <div class="menu-item-desc">Made fresh daily. Ask your server — it changes with what's coming off the grill and out of grandma's recipe book.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mains -->
+      <div class="menu-panel" id="tab-mains">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Signature Guembo Platter</span>
+              <span class="menu-item-price">$24</span>
+            </div>
+            <div class="menu-item-desc">The full Guembo's experience — smoked ribs, pulled pork, grilled sausage, two sides of your choice, and a square of cornbread. Feeds one hungry person very well.</div>
+            <span class="menu-item-tag">🔥 Our Signature</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">12-Hour Smoked Brisket Plate</span>
+              <span class="menu-item-price">$22</span>
+            </div>
+            <div class="menu-item-desc">Half-pound of brisket sliced to order. Served with house BBQ sauce, two sides, and white bread. Ask for burnt ends when available.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">St. Louis Ribs — Half Rack</span>
+              <span class="menu-item-price">$26</span>
+            </div>
+            <div class="menu-item-desc">Six hours on the pit, fall-off-the-bone tender. Glazed with your choice of house BBQ, sweet heat, or Carolina vinegar. Two sides included.</div>
+            <span class="menu-item-tag">🔥 Best Seller</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Jerk Chicken — Half Bird</span>
+              <span class="menu-item-price">$18</span>
+            </div>
+            <div class="menu-item-desc">Marinated 24 hours in a scotch bonnet jerk blend, then kissed by an open flame. Smoky, spicy, and deeply flavorful. One side included.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Grilled Salmon Fillet</span>
+              <span class="menu-item-price">$23</span>
+            </div>
+            <div class="menu-item-desc">8 oz Atlantic salmon seasoned with a citrus-herb rub, grilled over hardwood coals. Served with garlic butter rice and grilled asparagus.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Oxtail Stew</span>
+              <span class="menu-item-price">$28</span>
+            </div>
+            <div class="menu-item-desc">Slow-braised for hours in red wine, allspice, and island seasonings until it falls off the bone. Served over white rice with fried plantains.</div>
+            <span class="menu-item-tag gold-tag">Fri &amp; Weekend Only</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Smothered Pork Chop</span>
+              <span class="menu-item-price">$20</span>
+            </div>
+            <div class="menu-item-desc">Thick-cut pork chop, pan-seared and finished with a rich onion gravy. Old-school soul food at its finest. Two sides included.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Catfish &amp; Grits</span>
+              <span class="menu-item-price">$19</span>
+            </div>
+            <div class="menu-item-desc">Cornmeal-crusted catfish fried golden, laid over creamy stone-ground cheddar grits with a Cajun butter drizzle.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sides -->
+      <div class="menu-panel" id="tab-sides">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Baked Mac &amp; Cheese</span>
+              <span class="menu-item-price">$6</span>
+            </div>
+            <div class="menu-item-desc">Three-cheese blend baked until golden and bubbling. Creamy inside, crispy top. Not from a box — ever.</div>
+            <span class="menu-item-tag">🔥 Best Side</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Collard Greens</span>
+              <span class="menu-item-price">$5</span>
+            </div>
+            <div class="menu-item-desc">Slow-cooked low and slow with smoked turkey, onion, garlic, and a splash of apple cider vinegar. Pot likker included.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Fried Plantains</span>
+              <span class="menu-item-price">$5</span>
+            </div>
+            <div class="menu-item-desc">Sweet ripe plantains fried until caramelized and golden. A Miami staple. Ask for extra if you know you know.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Rice &amp; Peas</span>
+              <span class="menu-item-price">$5</span>
+            </div>
+            <div class="menu-item-desc">Long-grain rice cooked with kidney beans, coconut milk, fresh thyme, and scotch bonnet. Comes out fluffy and fragrant every time.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Cornbread</span>
+              <span class="menu-item-price">$4</span>
+            </div>
+            <div class="menu-item-desc">Cast-iron baked, honey-sweetened, golden brown. Served warm with whipped honey butter. Completes every plate.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Sweet Potato</span>
+              <span class="menu-item-price">$5</span>
+            </div>
+            <div class="menu-item-desc">Candied and roasted with brown sugar, cinnamon, and a pinch of cayenne. Comforting, sweet, and a little spicy.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Coleslaw</span>
+              <span class="menu-item-price">$4</span>
+            </div>
+            <div class="menu-item-desc">House-made daily. Creamy, tangy, and crunchy — made to cut through the richness of the smoked meats.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Seasoned Fries</span>
+              <span class="menu-item-price">$5</span>
+            </div>
+            <div class="menu-item-desc">Thick-cut fries tossed in Guembo's spice blend and served with house dipping sauce. Hard to stop at just one.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drinks -->
+      <div class="menu-panel" id="tab-drinks">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Homemade Lemonade</span>
+              <span class="menu-item-price">$4</span>
+            </div>
+            <div class="menu-item-desc">Fresh-squeezed daily. Classic, strawberry, mango, or hibiscus. Ask what's available today.</div>
+            <span class="menu-item-tag">🔥 Fan Favorite</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Sweet Iced Tea</span>
+              <span class="menu-item-price">$3</span>
+            </div>
+            <div class="menu-item-desc">Brewed strong, sweetened just right, poured over ice. Free refills. The way it's supposed to be.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Jamaica (Hibiscus)</span>
+              <span class="menu-item-price">$4</span>
+            </div>
+            <div class="menu-item-desc">House-brewed hibiscus tea with a hint of cinnamon and ginger. Tart, refreshing, and naturally beautiful.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Mango Punch</span>
+              <span class="menu-item-price">$4</span>
+            </div>
+            <div class="menu-item-desc">Real mango purée blended with tropical juices and a squeeze of lime. A taste of Miami in a cup.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Bottled Water</span>
+              <span class="menu-item-price">$2</span>
+            </div>
+            <div class="menu-item-desc">Still or sparkling.</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-top">
+              <span class="menu-item-name">Soft Drinks</span>
+              <span class="menu-item-price">$3</span>
+            </div>
+            <div class="menu-item-desc">Coke, Diet Coke, Sprite, Ginger Ale. Free refills.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE REVIEWS CTA -->
+  <div id="reviews-cta">
+    <div class="reviews-inner">
+      <div class="reviews-stars">⭐⭐⭐⭐⭐</div>
+      <h2 class="reviews-title">Enjoyed Your Visit?</h2>
+      <p class="reviews-sub">Your review helps the neighborhood find us — and lets us know we're doing it right. Takes 30 seconds and means the world to us.</p>
+      <a
+        href="https://maps.google.com/?q=GUEMBO'S+AND+GRILL+2055+NW+22nd+Ave+Miami+FL"
+        target="_blank"
+        rel="noopener"
+        class="btn-review"
+      >
+        <span style="font-size:1.1rem;">G</span>
+        Leave Us a Google Review
+      </a>
+    </div>
+  </div>
+
+  <!-- HOURS -->
+  <section id="hours">
+    <div class="container">
+      <p class="section-label">Plan Your Visit</p>
+      <h2 class="section-title">Hours of Operation</h2>
+      <div class="section-line" style="margin: 0 auto 0;"></div>
+      <div class="hours-card">
+        <div class="hours-row">
+          <span class="hours-day">Monday</span>
+          <span class="hours-time">10:30 AM – 9:30 PM</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Tuesday</span>
+          <span class="hours-time">10:30 AM – 9:30 PM</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Wednesday</span>
+          <span class="hours-time">10:30 AM – <span class="late">4:30 AM</span></span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Thursday</span>
+          <span class="hours-time">10:30 AM – <span class="late">4:30 AM</span></span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Friday</span>
+          <span class="hours-time">10:00 AM – <span class="late">4:30 AM</span></span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Saturday</span>
+          <span class="hours-time">10:30 AM – <span class="late">4:30 AM</span></span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">Sunday</span>
+          <span class="hours-time">10:30 AM – <span class="late">4:30 AM</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section id="location">
+    <div class="container">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Location &amp; Contact</h2>
+      <div class="section-line"></div>
+      <div class="location-grid">
+        <div class="location-info">
+          <div class="info-block">
+            <div class="info-label">Address</div>
+            <div class="info-value">2055 NW 22nd Ave<br />Miami, FL 33142<br /><span style="color:var(--muted);font-size:.85rem;">Allapattah neighborhood</span></div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Phone</div>
+            <div class="info-value"><a href="tel:7865362929">(786) 536-2929</a></div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Email</div>
+            <div class="info-value"><a href="mailto:hello@guembosandgrill.com">hello@guembosandgrill.com</a></div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Parking</div>
+            <div class="info-value">Street parking on NW 22nd Ave. Additional lot parking on NW 21st Ave.</div>
+          </div>
+          <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.5rem;">
+            <a href="tel:7865362929" class="btn-primary" style="display:inline-block;">📞 &nbsp;Call to Order</a>
+            <a href="https://maps.google.com/?q=GUEMBO'S+AND+GRILL+2055+NW+22nd+Ave+Miami+FL" target="_blank" rel="noopener" class="btn-outline" style="display:inline-block;">Get Directions</a>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <iframe
+            src="https://maps.google.com/maps?q=2055+NW+22nd+Ave,+Miami,+FL+33142&output=embed"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Guembo's and Grill location map">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-intro">
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title">Reserve a Table or<br />Ask Us Anything</h2>
+          <div class="section-line"></div>
+          <p>Want to book a large party, ask about catering, or just let us know you're coming? Reach out below or call us directly — we'd love to hear from you.</p>
+          <div class="contact-method">
+            <div class="contact-icon">📞</div>
+            <div class="contact-method-text">
+              <strong>(786) 536-2929</strong>
+              Daily from 10:30 AM
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-icon">📍</div>
+            <div class="contact-method-text">
+              <strong>2055 NW 22nd Ave, Miami FL 33142</strong>
+              Allapattah neighborhood
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-icon">🍖</div>
+            <div class="contact-method-text">
+              <strong>Catering Available</strong>
+              Events, parties &amp; bulk orders welcome
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" placeholder="Maria" required />
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" placeholder="Gonzalez" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="you@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="(305) 000-0000" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="guests">Party Size</label>
+              <select id="guests">
+                <option value="">Select</option>
+                <option>1–2 guests</option>
+                <option>3–5 guests</option>
+                <option>6–10 guests</option>
+                <option>10+ guests</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Preferred Date</label>
+              <input type="date" id="date" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Special requests, dietary needs, catering inquiry…"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message &nbsp;→</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Guembo's &amp; Grill</div>
+    <div class="footer-tagline">Bold Flavors &nbsp;·&nbsp; Real Fire &nbsp;·&nbsp; Allapattah, Miami</div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#hours">Hours</a>
+      <a href="#location">Location</a>
+      <a href="#contact">Contact</a>
+      <a href="https://maps.google.com/?q=GUEMBO'S+AND+GRILL+2055+NW+22nd+Ave+Miami+FL" target="_blank" rel="noopener">Leave a Review</a>
+    </div>
+    <div class="footer-copy">© 2025 Guembo's and Grill &nbsp;·&nbsp; 2055 NW 22nd Ave, Miami, FL 33142 &nbsp;·&nbsp; (786) 536-2929</div>
+  </footer>
+
+  <script>
+    // ── Sticky nav ──────────────────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+    // Always solid on mobile
+    if (window.innerWidth <= 900) navbar.classList.add('scrolled');
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 900) navbar.classList.add('scrolled');
+    });
+
+    // ── Mobile menu ─────────────────────────────────────────────
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // ── Menu tabs ───────────────────────────────────────────────
+    function switchTab(btn, panelId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + panelId).classList.add('active');
+    }
+
+    // ── Contact form ────────────────────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = '✓ Message Sent!';
+      btn.style.background = '#2a7a3b';
+      setTimeout(() => {
+        btn.textContent = 'Send Message →';
+        btn.style.background = '';
+        e.target.reset();
+      }, 3500);
+    }
+
+    // ── Fade-in on scroll ───────────────────────────────────────
+    const fadeEls = document.querySelectorAll(
+      '.about-grid, .menu-photos, .menu-grid, .location-grid, .contact-grid, .hours-card, .stats-grid, .reviews-inner'
+    );
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    fadeEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(22px)';
+      el.style.transition = 'opacity .6s ease, transform .6s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

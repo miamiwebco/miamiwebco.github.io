@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Script — NEPQ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0e0e0e;
+      --surface:    #181818;
+      --border:     #2a2a2a;
+      --text:       #f0ece4;
+      --muted:      #6b6b6b;
+      --you:        #f0ece4;
+
+      --c1:         #3b82f6;   /* Connection      — blue   */
+      --c2:         #f59e0b;   /* Problem         — amber  */
+      --c3:         #ef4444;   /* Consequence     — red    */
+      --c4:         #22c55e;   /* Solution        — green  */
+      --c-obj:      #a855f7;   /* Objections      — purple */
+
+      --rule-bg:    #1a1a1a;
+      --rule-border:#e8572a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      padding-bottom: 80px; /* room for sticky bar */
+    }
+
+    /* ── HEADER ───────────────────────────────────────── */
+    header {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bg);
+    }
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--text);
+    }
+    .phase-nav {
+      display: flex; gap: .4rem; flex-wrap: wrap;
+      margin-top: .75rem;
+    }
+    .phase-pill {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .28rem .7rem;
+      border-radius: 100px;
+      text-decoration: none;
+      border: 1px solid currentColor;
+      opacity: .7;
+      transition: opacity .15s;
+    }
+    .phase-pill:hover, .phase-pill:active { opacity: 1; }
+    .pill-1 { color: var(--c1); }
+    .pill-2 { color: var(--c2); }
+    .pill-3 { color: var(--c3); }
+    .pill-4 { color: var(--c4); }
+    .pill-obj { color: var(--c-obj); }
+
+    /* ── MAIN ────────────────────────────────────────── */
+    main { padding: .5rem 0 1rem; }
+
+    /* ── PHASE BLOCK ─────────────────────────────────── */
+    .phase { padding: 1.5rem 1.25rem; border-bottom: 1px solid var(--border); }
+
+    .phase-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .68rem; font-weight: 800;
+      letter-spacing: .15em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .phase-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .phase-sub {
+      font-size: .72rem; color: var(--muted);
+      font-weight: 400; letter-spacing: .05em;
+      text-transform: none; margin-left: .25rem;
+    }
+
+    /* ── SCRIPT LINE ─────────────────────────────────── */
+    .line { margin-bottom: 1.1rem; }
+    .line:last-child { margin-bottom: 0; }
+
+    .line-who {
+      font-size: .6rem; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase;
+      margin-bottom: .3rem;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .line-who::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    .speech {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      border-left: 3px solid transparent;
+    }
+
+    .moment {
+      background: transparent;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: .7rem 1rem;
+      font-size: .82rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.55;
+    }
+    .moment strong { color: var(--text); font-style: normal; }
+
+    /* ── PHASE COLORS (border + who label) ───────────── */
+    .phase-1 .speech { border-left-color: var(--c1); }
+    .phase-1 .line-who { color: var(--c1); }
+
+    .phase-2 .speech { border-left-color: var(--c2); }
+    .phase-2 .line-who { color: var(--c2); }
+
+    .phase-3 .speech { border-left-color: var(--c3); }
+    .phase-3 .line-who { color: var(--c3); }
+
+    .phase-4 .speech { border-left-color: var(--c4); }
+    .phase-4 .line-who { color: var(--c4); }
+
+    /* ── THEM lines ──────────────────────────────────── */
+    .them .speech {
+      background: transparent;
+      border-left-color: var(--border);
+      color: var(--muted);
+      font-style: italic;
+      padding: .5rem .9rem;
+    }
+    .them .line-who { color: var(--muted); }
+
+    /* ── OBJECTIONS ──────────────────────────────────── */
+    .phase-obj { background: #100e16; }
+    .phase-obj .phase-label { color: var(--c-obj); }
+
+    .obj-list { display: flex; flex-direction: column; gap: .6rem; }
+
+    details {
+      background: var(--surface);
+      border: 1px solid #2e2040;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    details[open] { border-color: var(--c-obj); }
+
+    summary {
+      padding: .95rem 1.1rem;
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      list-style: none;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .75rem;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    summary::-webkit-details-marker { display: none; }
+    .summary-text { flex: 1; }
+    .summary-q {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--c-obj); margin-bottom: .2rem;
+    }
+    .chevron {
+      font-size: .8rem; color: var(--muted);
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+    details[open] .chevron { transform: rotate(180deg); }
+
+    .obj-answer {
+      padding: 0 1.1rem 1rem;
+      border-top: 1px solid #2e2040;
+    }
+    .obj-answer .speech {
+      border-left-color: var(--c-obj);
+      margin-top: .85rem;
+      font-size: .97rem;
+    }
+    .obj-note {
+      margin-top: .65rem;
+      font-size: .78rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.55;
+      padding-left: .5rem;
+    }
+
+    /* ── CLOSE BLOCK ─────────────────────────────────── */
+    .close-block {
+      background: #0d160f;
+      border: 1px solid #1e3324;
+      border-radius: 10px;
+      padding: 1.1rem;
+      margin-top: 1rem;
+    }
+    .close-block .label {
+      font-size: .65rem; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--c4); margin-bottom: .75rem;
+    }
+
+    /* ── GOLDEN RULE BAR ─────────────────────────────── */
+    .golden-rule {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: var(--rule-bg);
+      border-top: 2px solid var(--rule-border);
+      padding: .85rem 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .rule-badge {
+      font-size: .58rem; font-weight: 900;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--rule-border);
+      border: 1px solid var(--rule-border);
+      padding: .22rem .55rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .rule-text {
+      font-size: .82rem;
+      color: rgba(240,236,228,.7);
+      line-height: 1.4;
+    }
+    .rule-text strong { color: var(--text); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <h1>📞 Cold Call Script</h1>
+  <nav class="phase-nav">
+    <a class="phase-pill pill-1" href="#connection">Connection</a>
+    <a class="phase-pill pill-2" href="#problem">Problem</a>
+    <a class="phase-pill pill-3" href="#consequence">Consequence</a>
+    <a class="phase-pill pill-4" href="#solution">Solution</a>
+    <a class="phase-pill pill-obj" href="#objections">Objections</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ── PHASE 1: CONNECTION ───────────────────────── -->
+  <section class="phase phase-1" id="connection">
+    <div class="phase-label" style="color:var(--c1);">
+      <span class="phase-dot" style="background:var(--c1);"></span>
+      Phase 1 — Connection
+      <span class="phase-sub">Don't sound like a salesperson</span>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Hello, hi — I was actually looking at your restaurant on Google. Do you guys have a website I could check out real quick?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">No / We don't have one</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Oh okay, I wasn't sure — sometimes they're hard to find. Hey, is this the owner or manager by any chance?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">Yes, I'm the owner / manager</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Perfect. I'll be honest with you — the reason I'm calling is I work with local Miami restaurants and I noticed you guys didn't have one. I'm not trying to sell you anything right now, I'm just curious about something if you have like 2 minutes."</div>
+    </div>
+  </section>
+
+  <!-- ── PHASE 2: PROBLEM AWARENESS ───────────────── -->
+  <section class="phase phase-2" id="problem">
+    <div class="phase-label" style="color:var(--c2);">
+      <span class="phase-dot" style="background:var(--c2);"></span>
+      Phase 2 — Problem Awareness
+      <span class="phase-sub">Let them feel it</span>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"How are people usually discovering your restaurant right now — like someone who's never been before?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">Word of mouth, walk-ins, Instagram…</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Yeah that makes sense. And how long have you guys been relying mainly on that?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">Since we opened / a few years…</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Got it. And when someone hears about you and wants to check you out before coming — like look at the menu, see the vibe, check your hours — where do they go right now?"</div>
+    </div>
+
+    <div class="line moment">
+      <strong>Let the silence sit.</strong> Don't fill it. They're doing the work for you.
+    </div>
+  </section>
+
+  <!-- ── PHASE 3: CONSEQUENCE ──────────────────────── -->
+  <section class="phase phase-3" id="consequence">
+    <div class="phase-label" style="color:var(--c3);">
+      <span class="phase-dot" style="background:var(--c3);"></span>
+      Phase 3 — Consequence
+      <span class="phase-sub">Make them do the math</span>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"I ask because — and tell me if I'm wrong — but right now if someone searches 'restaurants near me' in your area on their phone, your competitors with websites are showing up first. You're basically invisible to anyone who doesn't already know you exist. Does that sound about right?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">Yeah… that's probably true</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"How many new customers a week would you say actually find you for the first time right now?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">They give a number</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"So what do you think you're missing out on — just from the people searching on Google who never find you?"</div>
+    </div>
+
+    <div class="line moment">
+      <strong>Let them say the number. Don't say it for them.</strong> Whatever they say is more powerful than anything you could quote.
+    </div>
+  </section>
+
+  <!-- ── PHASE 4: SOLUTION ─────────────────────────── -->
+  <section class="phase phase-4" id="solution">
+    <div class="phase-label" style="color:var(--c4);">
+      <span class="phase-dot" style="background:var(--c4);"></span>
+      Phase 4 — Solution Awareness
+      <span class="phase-sub">The demo, not the pitch</span>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"Here's why I actually called — I went ahead and built you a free demo, just to show you what it could look like. No commitment, nothing to pay. I just figured it's easier to show you than explain it. Would it be alright if I sent you the link right now while we're talking?"</div>
+    </div>
+
+    <div class="line them">
+      <div class="line-who">Them</div>
+      <div class="speech">Sure / yeah go ahead</div>
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"I'm sending it now — just let me know when you see it."</div>
+    </div>
+
+    <div class="line moment">
+      <strong>Wait.</strong> Don't say anything else. Let them open the link.
+    </div>
+
+    <div class="line">
+      <div class="line-who">You</div>
+      <div class="speech">"What do you think?"</div>
+    </div>
+
+    <div class="line moment">
+      <strong>Stop talking.</strong> Let them react. The next person who speaks loses.
+    </div>
+
+    <!-- CLOSE -->
+    <div class="close-block">
+      <div class="label">If They Like It — Transition to Close</div>
+
+      <div class="line">
+        <div class="line-who" style="color:var(--c4);">You</div>
+        <div class="speech" style="border-left-color:var(--c4);">"Glad you like it. So the way this works — it's a one-time fee to build it out fully with your real menu, photos, everything. It's $500 for the full restaurant site. After that it's yours. If you ever want updates there's an optional monthly thing but most people just do the one-time. Does that sound reasonable?"</div>
+      </div>
+
+      <div class="line moment" style="margin-top:.75rem;">
+        <strong>Then stop.</strong> Let them answer. Don't pre-justify the price.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OBJECTIONS ─────────────────────────────────── -->
+  <section class="phase phase-obj" id="objections">
+    <div class="phase-label">
+      <span class="phase-dot" style="background:var(--c-obj);"></span>
+      Objections
+      <span class="phase-sub" style="color:#7a6a8a;">Tap to expand</span>
+    </div>
+
+    <div class="obj-list">
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "I'm not interested."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"Totally fair. Can I just ask — is it more that the timing isn't right, or that you don't really see the value in having a website for the restaurant?"</div>
+          <div class="obj-note">→ Either answer tells you exactly what to address next. Don't defend. Just ask.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "I already have someone handling that."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"Oh nice — where's the site at? I'd love to check it out."</div>
+          <div class="obj-note">→ If they have one: wish them well, hang up clean.<br />→ If they don't / "we're working on it": "Got it — how long has that been in progress?"</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "I don't have time right now."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"No worries at all. When's a better time to call — would tomorrow morning work, or is afternoon better for you?"</div>
+          <div class="obj-note">→ Always offer two specific options. "I'll call you back sometime" is not a follow-up time.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "Just send me an email."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"Of course — what's your email?"</div>
+          <div class="obj-note">→ Get it. Send the demo link immediately with a one-line message.<br />→ Follow up in 48 hours: "Hey, just wanted to make sure you got that — did you get a chance to look at the demo?"</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "$500 is too much."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"What would make it feel worth it to you?"</div>
+          <div class="obj-note">→ Let them set the frame. If they push back on value, not just price:<br /><br />"Think about it this way — if the site brings in two extra tables a month, you've made it back. After that it's pure profit every month for as long as it's up. Does that math make sense?"</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "I need to think about it."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"Of course — what part is it that you're still unsure about?"</div>
+          <div class="obj-note">→ "Think about it" usually means one specific hesitation they haven't named. Get them to say it.<br /><br />→ Then: "Can I send you the demo link so you have something to actually look at while you're thinking? Easier to decide when you can see the real thing."<br /><br />→ Lock in a callback time before hanging up.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "We get enough customers already."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"That's great — so would you say the business is exactly where you want it, or is there still room to grow?"</div>
+          <div class="obj-note">→ Almost no owner will say they're maxed out. Their own answer opens the door.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-text">
+            <div class="summary-q">Objection</div>
+            "We use Instagram / social media."
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="obj-answer">
+          <div class="speech">"Yeah social is great. Curious — when someone searches 'restaurants near me' on Google, does your Instagram show up there, or just your profile page?"</div>
+          <div class="obj-note">→ They'll realize the answer is no. Let them arrive at that themselves.</div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- GOLDEN RULE BAR -->
+<div class="golden-rule">
+  <span class="rule-badge">Golden Rule</span>
+  <span class="rule-text"><strong>Never answer an objection directly.</strong> Respond with a question.</span>
+</div>
+
+<script>
+  // Close all other details when one opens (accordion behavior)
+  document.querySelectorAll('details').forEach(el => {
+    el.addEventListener('toggle', () => {
+      if (el.open) {
+        document.querySelectorAll('details').forEach(other => {
+          if (other !== el) other.removeAttribute('open');
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold Call Script — Miami Restaurant Websites</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      background: #f4f4f4;
+      padding: 2rem;
+    }
+
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.1);
+    }
+
+    /* HEADER */
+    .doc-header {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .doc-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+    }
+    .doc-header h1 span { color: #e8572a; }
+    .doc-meta { text-align: right; font-size: .75rem; color: rgba(255,255,255,.45); line-height: 1.7; white-space: nowrap; }
+
+    /* BODY */
+    .doc-body { padding: 2rem 2.5rem; }
+
+    /* SECTION */
+    .section { margin-bottom: 2rem; }
+    .section:last-child { margin-bottom: 0; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid #1a1a1a;
+    }
+    .section-num {
+      background: #e8572a;
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .2rem .55rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .section-title {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+    }
+
+    /* SCRIPT LINES */
+    .line {
+      display: flex;
+      gap: .75rem;
+      margin-bottom: .65rem;
+      align-items: flex-start;
+    }
+    .line-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: #1a1a1a;
+      padding: .2rem .5rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      margin-top: .1rem;
+      min-width: 52px;
+      text-align: center;
+    }
+    .line-label.you { background: #e8572a; }
+    .line-label.them { background: #555; }
+    .line-label.note { background: #2563eb; }
+    .line-text {
+      font-size: .875rem;
+      line-height: 1.65;
+      color: #1a1a1a;
+      flex: 1;
+    }
+    .line-text em {
+      font-style: normal;
+      color: #555;
+      font-size: .8rem;
+    }
+    .line-text strong { font-weight: 600; }
+
+    /* NOTE BOX */
+    .note-box {
+      background: #fef9f0;
+      border-left: 3px solid #e8572a;
+      padding: .65rem 1rem;
+      border-radius: 0 4px 4px 0;
+      font-size: .8rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: .65rem;
+    }
+    .note-box strong { color: #1a1a1a; }
+
+    /* OBJECTIONS GRID */
+    .objections { display: flex; flex-direction: column; gap: 1.1rem; }
+    .objection-block {
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .objection-q {
+      background: #f7f7f7;
+      padding: .6rem 1rem;
+      font-size: .8rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      border-bottom: 1px solid #e8e8e8;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .objection-q::before {
+      content: '?';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px; height: 18px;
+      background: #555;
+      color: #fff;
+      border-radius: 50%;
+      font-size: .7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .objection-a {
+      padding: .75rem 1rem;
+      font-size: .85rem;
+      line-height: 1.65;
+      color: #1a1a1a;
+    }
+    .objection-a .follow-up {
+      margin-top: .5rem;
+      font-size: .78rem;
+      color: #555;
+      font-style: italic;
+    }
+
+    /* QUICK REF TABLE */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+    .ref-table th {
+      background: #1a1a1a;
+      color: #fff;
+      padding: .55rem 1rem;
+      text-align: left;
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .ref-table td {
+      padding: .6rem 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:nth-child(even) td { background: #fafafa; }
+    .ref-table td:first-child { font-weight: 600; color: #555; width: 36%; }
+    .ref-table td:last-child { color: #1a1a1a; }
+
+    /* TIPS FOOTER */
+    .tips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 2rem;
+    }
+    .tip {
+      background: #f7f7f7;
+      border-radius: 6px;
+      padding: .85rem 1rem;
+      font-size: .78rem;
+      line-height: 1.6;
+      color: #444;
+    }
+    .tip strong {
+      display: block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #e8572a;
+      margin-bottom: .3rem;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body { background: #fff; padding: 0; font-size: 12px; }
+      .page { box-shadow: none; border-radius: 0; max-width: 100%; }
+      .section { page-break-inside: avoid; }
+      .objection-block { page-break-inside: avoid; }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: .5rem; }
+      .doc-header { flex-direction: column; align-items: flex-start; }
+      .doc-meta { text-align: left; }
+      .doc-body { padding: 1.25rem; }
+      .tips { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <h1>Cold Call Script<br /><span>Miami Restaurant Websites</span></h1>
+    </div>
+    <div class="doc-meta">
+      Nicholas<br />
+      Miami, FL<br />
+      One-time build · $500
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- SECTION 1: OPENING -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Step 1</span>
+        <span class="section-title">Opening</span>
+      </div>
+
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Hey, is this [Restaurant Name]?"</div>
+      </div>
+      <div class="line">
+        <span class="line-label them">Them</span>
+        <div class="line-text"><em>Yes</em></div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Hi, my name's Nicholas — I'm local, over here in Miami. Quick question — do you guys have a website I could check out?"</div>
+      </div>
+      <div class="line">
+        <span class="line-label them">Them</span>
+        <div class="line-text"><em>No / We don't have one</em></div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Yeah, that's what I figured. So I do web design for local restaurants here in Miami, and I saw you guys on Google — you've got people coming in, clearly doing something right — but there's no website, so I went ahead and put together a quick demo for you. Free, no strings. I just figured it's easier to show you something real than talk about it."</div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Do you have 30 seconds? I can text you the link right now while we're on the phone."</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: UNCOVER -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Step 2</span>
+        <span class="section-title">Uncover the Problem</span>
+      </div>
+
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Can I ask — right now, how do most new customers find you? Like people who've never been before."</div>
+      </div>
+      <div class="line">
+        <span class="line-label them">Them</span>
+        <div class="line-text"><em>Word of mouth / walk-ins / social media</em></div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Yeah, that's how most spots operate. How long have you been going with just that?"</div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"And honestly — does that feel like it's growing, or has it kind of plateaued?"</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: VALUE -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Step 3</span>
+        <span class="section-title">The Value Moment</span>
+      </div>
+
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Here's the thing — when someone in your neighborhood pulls out their phone and searches 'restaurants near me' or 'best food in Allapattah,' they're not finding you. They're finding whoever has a website. Google skips right past businesses with no site."</div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"What do you think your average table spends when they come in?"</div>
+      </div>
+      <div class="line">
+        <span class="line-label them">Them</span>
+        <div class="line-text"><em>Say they answer $40</em></div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"Okay so if just 10 new tables a month found you through Google — that's $400 extra a month, <strong>$4,800 a year</strong>, just from showing up in search. And that's being conservative. Right now that's just not happening because there's nothing for Google to find."</div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: CLOSE -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Step 4</span>
+        <span class="section-title">The Close</span>
+      </div>
+
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"So what I put together for you has your menu, hours, address, contact form — everything. Looks professional. I can send the link right now and you can pull it up while we're talking."</div>
+      </div>
+      <div class="line">
+        <span class="line-label note">Do it</span>
+        <div class="line-text"><em>Send the demo link NOW. Don't wait.</em></div>
+      </div>
+      <div class="line">
+        <span class="line-label you">You</span>
+        <div class="line-text">"If you like it, I can make it live with your real info for <strong>$500, one time</strong>. No subscriptions, nothing monthly. It's yours."</div>
+      </div>
+
+      <div class="note-box">
+        <strong>If they ask why you built it for free:</strong> "Honestly I'd rather just show you than tell you. Easier for both of us."
+      </div>
+    </div>
+
+    <!-- SECTION 5: OBJECTIONS -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Step 5</span>
+        <span class="section-title">Objection Responses</span>
+      </div>
+
+      <div class="objections">
+
+        <div class="objection-block">
+          <div class="objection-q">"I'm not interested."</div>
+          <div class="objection-a">
+            "Totally fair. Can I just text you the demo link anyway? You don't have to do anything with it — but if you ever change your mind, at least you've seen what it could look like. Takes two seconds."
+            <div class="follow-up">→ Most people say yes. Now you have a warm lead to follow up with.</div>
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"I already have someone handling that."</div>
+          <div class="objection-a">
+            "Oh nice — do you have a site up already then? I might have just missed it."
+            <div class="follow-up">→ If yes: wish them well, hang up gracefully.<br />→ If no / "we're working on it": "Got it, I won't waste your time. If it ever doesn't work out with them, I'm local and quick — can I text you my number just in case?"</div>
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"I don't have time for this."</div>
+          <div class="objection-a">
+            "I hear you — I'll be quick. I'm not asking you to do anything right now. I just want to text you the link. You can look at it tonight when it's slow, or whenever. Thirty seconds to receive a text — that's all I'm asking."
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"Just send me an email."</div>
+          <div class="objection-a">
+            "I can do that — what's your email?"
+            <div class="follow-up">→ Get it, send immediately with the demo link in the body.<br />→ Follow up in 48 hours: "Hey, just checking you got that — did you get a chance to look at the demo?"</div>
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"$500 is too much."</div>
+          <div class="objection-a">
+            "I get it. Think about it this way — you make that back in two or three extra tables that found you online. After that, every customer that walks in from Google is pure profit, every month, for as long as the site is up."
+            <div class="follow-up">→ If still hesitant: "If $500 is tight right now, I can do two payments of $250. Whatever works."</div>
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"I need to think about it."</div>
+          <div class="objection-a">
+            "One hundred percent, no pressure. Can I at least send you the demo link so you have something to actually look at while you're thinking it over? A lot of people find it easier to decide once they can see the real thing."
+            <div class="follow-up">→ Send it, then: "I'll check back in a couple days — what's the best time to reach you, mornings or afternoons?" Lock in a specific callback time. "I'll think about it" without a follow-up time = dead lead.</div>
+          </div>
+        </div>
+
+        <div class="objection-block">
+          <div class="objection-q">"We use social media, that's enough."</div>
+          <div class="objection-a">
+            "Social media is great for people who already follow you. A website is how strangers find you — people who've never heard of you, searching on Google right now. They're two different things. You really want both."
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- QUICK REF TABLE -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">Ref</span>
+        <span class="section-title">Quick Reference — Print &amp; Keep Handy</span>
+      </div>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>They say…</th>
+            <th>You say…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No website</td>
+            <td>"That's why I'm calling — I already built you a demo."</td>
+          </tr>
+          <tr>
+            <td>Word of mouth only</td>
+            <td>"Is that growing, or has it kind of plateaued?"</td>
+          </tr>
+          <tr>
+            <td>Not interested</td>
+            <td>"Can I just text you the link anyway?"</td>
+          </tr>
+          <tr>
+            <td>Already have someone</td>
+            <td>"Do you have a site up already? I might have missed it."</td>
+          </tr>
+          <tr>
+            <td>No time</td>
+            <td>"Thirty seconds to receive a text — that's all I'm asking."</td>
+          </tr>
+          <tr>
+            <td>Send an email</td>
+            <td>Get the email → send NOW → follow up in 48h</td>
+          </tr>
+          <tr>
+            <td>$500 too much</td>
+            <td>"Two extra tables and you've made it back."</td>
+          </tr>
+          <tr>
+            <td>Need to think</td>
+            <td>Send link + lock in a specific callback time</td>
+          </tr>
+          <tr>
+            <td>We use social media</td>
+            <td>"Social is for followers. A website is how strangers find you."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TIPS -->
+    <div class="tips">
+      <div class="tip">
+        <strong>Before You Dial</strong>
+        Have the demo URL copied and ready to paste. The moment they say "okay show me" is the hottest second of the call — don't fumble it.
+      </div>
+      <div class="tip">
+        <strong>Tone</strong>
+        Slow down. Confident, not pushy. You're a local guy doing them a favor, not a telemarketer hitting a quota. Smile — it comes through on the phone.
+      </div>
+      <div class="tip">
+        <strong>Always Get a Next Step</strong>
+        Never hang up without a yes, a link sent, an email, or a specific callback time. "I'll think about it" with nothing locked in is a no.
+      </div>
+    </div>
+
+  </div><!-- /doc-body -->
+</div><!-- /page -->
+</body>
+</html>
