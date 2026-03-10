@@ -12,10 +12,11 @@
  */
 
 require('dotenv').config();
-const fs       = require('fs');
+const fs        = require('fs');
+const path      = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
-const CSV_PATH  = 'miami_leads.csv';
+const CSV_PATH = path.join(__dirname, '../data/miami_leads.csv');
 const YOUR_NAME = process.env.YOUR_NAME || 'Nicholas';
 
 if (!process.env.ANTHROPIC_API_KEY) {

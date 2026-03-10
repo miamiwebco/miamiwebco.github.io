@@ -6,9 +6,12 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "outreach": "node outreach.js",
-    "outreach:dry": "node outreach.js --dry-run",
-    "regen-emails": "node regenerate-emails.js"
+    "dashboard": "node dashboard/build-dashboard.js",
+    "outreach": "node outreach/outreach.js",
+    "outreach:dry": "node outreach/outreach.js --dry-run",
+    "regen-emails": "node outreach/regenerate-emails.js",
+    "find-emails": "node outreach/find-emails.js",
+    "find-socials": "node outreach/find-socials.js"
   },
   "engines": {
     "node": ">=18.0.0"

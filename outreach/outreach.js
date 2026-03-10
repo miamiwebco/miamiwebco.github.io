@@ -21,11 +21,12 @@
  */
 
 require('dotenv').config();
-const fs       = require('fs');
+const fs         = require('fs');
+const path       = require('path');
 const nodemailer = require('nodemailer');
 const Anthropic  = require('@anthropic-ai/sdk');
 
-const CSV_PATH = 'miami_leads.csv';
+const CSV_PATH = path.join(__dirname, '../data/miami_leads.csv');
 const DRY_RUN  = process.argv.includes('--dry-run');
 const YOUR_NAME = process.env.YOUR_NAME || 'Nicholas';
 

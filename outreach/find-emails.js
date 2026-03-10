@@ -1,7 +1,8 @@
 require('dotenv').config();
-const fs = require('fs');
+const fs   = require('fs');
+const path = require('path');
 
-const CSV_PATH = 'miami_leads.csv';
+const CSV_PATH = path.join(__dirname, '../data/miami_leads.csv');
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
 // ── CSV parser (handles quoted multi-line fields correctly) ──────────────────

@@ -3,7 +3,8 @@
  * Reads miami_leads.csv and writes dashboard.html with leads embedded as JSON.
  * Run this any time the CSV changes: node build-dashboard.js
  */
-const fs = require('fs');
+const fs   = require('fs');
+const path = require('path');
 
 // ── CSV parser (handles quoted multi-line fields) ────────────────────────────
 function parseCSV(text) {
@@ -36,7 +37,7 @@ function parseCSV(text) {
 }
 
 // ── Read CSV → JSON ──────────────────────────────────────────────────────────
-const [header, ...rows] = parseCSV(fs.readFileSync('miami_leads.csv', 'utf8'));
+const [header, ...rows] = parseCSV(fs.readFileSync(path.join(__dirname, '../data/miami_leads.csv'), 'utf8'));
 const col = name => header.indexOf(name);
 const leads = rows.map(r => ({
   name:         r[col('Business Name')]  || '',
@@ -702,5 +703,5 @@ renderTable();
 </body>
 </html>`;
 
-fs.writeFileSync('dashboard.html', html);
-console.log('Written dashboard.html — ' + Math.round(html.length / 1024) + 'KB (' + leads.length + ' leads)');
+fs.writeFileSync(path.join(__dirname, 'dashboard.html'), html);
+console.log('Written dashboard/dashboard.html — ' + Math.round(html.length / 1024) + 'KB (' + leads.length + ' leads)');

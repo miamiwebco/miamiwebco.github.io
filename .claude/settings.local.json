@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx http-server:*)",
       "Bash(cmd:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(mkdir:*)"
     ]
   }
 }
