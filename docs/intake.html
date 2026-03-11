@@ -756,6 +756,7 @@
           <div class="file-list" id="logo-list"></div>
         </div>
         <p class="hint">No logo? No problem — we'll design a simple text logo for you.</p>
+        <p class="hint" style="margin-top:.5rem;color:#f0c040;">Can't attach files here? Paste a Google Drive or Dropbox link in the Special Notes box below.</p>
       </div>
 
       <div class="field">
@@ -767,6 +768,7 @@
           <div class="file-list" id="photos-list"></div>
         </div>
         <p class="hint">Phone photos are fine. More photos = better gallery.</p>
+        <p class="hint" style="margin-top:.5rem;color:#f0c040;">Alternatively, share a Google Drive or Dropbox folder link in Special Notes.</p>
       </div>
     </div>
 
@@ -909,8 +911,8 @@
     });
   });
 
-  // ── Form submit
-  document.getElementById('intake-form').addEventListener('submit', function(e) {
+  // ── Form submit → Formspree
+  document.getElementById('intake-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const pkg = document.querySelector('input[name="package"]:checked');
@@ -923,18 +925,33 @@
     btn.disabled = true;
     btn.querySelector('span').textContent = 'Sending…';
 
-    // Collect form data (for future Formspree/email integration)
     const data = new FormData(this);
     const bizName = data.get('business_name') || 'your restaurant';
 
-    // Simulate a brief send delay then show success
-    setTimeout(() => {
-      document.getElementById('intake-form').style.display = 'none';
-      const screen = document.getElementById('success-screen');
-      document.getElementById('success-biz-name').textContent = bizName;
-      screen.style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 800);
+    try {
+      const res = await fetch('https://formspree.io/f/mdawgwbp', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        document.getElementById('intake-form').style.display = 'none';
+        document.getElementById('success-biz-name').textContent = bizName;
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const json = await res.json().catch(() => ({}));
+        const msg = (json.errors || []).map(err => err.message).join(', ') || 'Submission failed. Please try again.';
+        alert(msg);
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Submit My Order';
+      }
+    } catch (err) {
+      alert('Network error — please check your connection and try again.');
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'Submit My Order';
+    }
   });
 </script>
 
